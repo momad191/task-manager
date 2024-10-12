@@ -1,10 +1,10 @@
 import React from "react";
-
+import { doSocialLogin } from "@/app/actions";
 const LoginForm = () => {
   return (
     <>
       <div>LoginForm</div>
-      <form>
+      <form action={doSocialLogin}>
         <button
           className="bg-pink-400 text-white p-1 rounded-md m-1 text-lg"
           type="submit"
