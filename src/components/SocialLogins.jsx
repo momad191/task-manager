@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { doSocialLogin } from "@/app/actions";
 const SocialLogins = () => {

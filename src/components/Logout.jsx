@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { doLogout } from "@/app/actions";
 const Logout = () => {
