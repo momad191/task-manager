@@ -1,5 +1,6 @@
 "use client";
 import SocialLogins from "./SocialLogins";
+
 import { useRouter } from "next/navigation";
 
 const RegistrationForm = () => {
