@@ -6,7 +6,7 @@ export default function Landing() {
       <div>Landing Page</div>
       <div className="flex flex-col justify-center items-center p-8">
         <Link className="text-3xl underline" href="/tasks">
-          All Tasks
+          All Tasks .
         </Link>
       </div>
     </>
