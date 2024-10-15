@@ -12,41 +12,88 @@ const Navbar = async () => {
   const userName = loggedInUser?.name;
 
   return (
-    <header className="flex justify-between bg-slate-900 text-white p-2">
-      <Link href="/">
-        <h1 className="text-2xl">Product App</h1>
-      </Link>
-      <nav>
-        <ul className="flex pt-1">
-          {userName ? (
-            <li className="flex">
-              <Link href="/dashboard">
-                {session?.user?.image ? (
-                  <Image
-                    src={session?.user?.image}
-                    alt={session?.user?.name}
-                    width={25}
-                    height={25}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <CircleUserRound />
-                )}
-              </Link>
-              <span className="mx-1">|</span>
-              <Logout />
-            </li>
-          ) : (
-            <>
-              <li className="mx-2">
-                <Link href="/login">Login</Link>
-              </li>
-              <li className="mx-2">
-                <Link href="/register">Register</Link>
-              </li>
-            </>
-          )}
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg m-b-11">
+      <nav className="container mx-auto p-4 flex justify-between items-center">
+        {/* Logo or Brand Name */}
+        <div className="text-2xl font-bold text-gray-800 hover:text-green-500 transition-all duration-300 ease-in-out">
+          TaskManager
+        </div>
+
+        {/* Menu Items */}
+        <ul className="flex space-x-6">
+          <li>
+            <Link href="/">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                Home
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/tasks">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                Tasks
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/tasks/add">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                + ADD New Task
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/complete">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                Completed
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/about">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                About
+              </button>
+            </Link>
+          </li>
+
+          <li>{userName && <Logout />}</li>
         </ul>
+
+        {/* Profile Picture */}
+        {userName ? (
+          <div className="flex items-center">
+            <Link href="/home">
+              {session?.user?.image ? (
+                <Image
+                  src={session?.user?.image}
+                  alt={session?.user?.name}
+                  width={25}
+                  height={25}
+                  className="rounded-full w-10 h-10 border-2 border-green-500 hover:border-green-600 transition-all duration-300 ease-in-out"
+                />
+              ) : (
+                <CircleUserRound />
+              )}
+            </Link>
+          </div>
+        ) : (
+          <>
+            <ul className="flex space-x-6">
+              <Link href="/login">
+                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                  Login
+                </button>
+              </Link>
+
+              <Link href="/register">
+                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                  Sign up
+                </button>
+              </Link>
+            </ul>
+          </>
+        )}
       </nav>
     </header>
   );

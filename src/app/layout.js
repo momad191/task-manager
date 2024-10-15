@@ -1,8 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import { Providers } from "./redux/providers";
 import { dbConnect } from "@/lib/mongo";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,12 +13,16 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const conn = await dbConnect();
+  await dbConnect();
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        {children}
+        <Providers>
+          <Navbar />
+          <br /> <br /> <br /> <br />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
