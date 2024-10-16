@@ -7,3 +7,12 @@ export async function createUser(user) {
     throw new Error(e);
   }
 }
+
+export async function getUsers() {
+  try {
+    const users = await User.find({});
+    return users;
+  } catch (e) {
+    throw new Error(e);
+  }
+}

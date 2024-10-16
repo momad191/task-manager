@@ -27,7 +27,10 @@ const RegistrationForm = () => {
         }),
       });
 
-      response.status === 201 && router.push("/");
+      // Fix the short-circuit by using an if statement
+      if (response.status === 201) {
+        router.push("/");
+      }
     } catch (e) {
       console.error(e.message);
     }

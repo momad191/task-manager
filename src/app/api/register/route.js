@@ -23,7 +23,7 @@ export const POST = async (request) => {
   try {
     await createUser(newUser);
   } catch (err) {
-    return new NextResponse(error.mesage, {
+    return new NextResponse(err.mesage, {
       status: 500,
     });
   }

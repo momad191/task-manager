@@ -13,7 +13,7 @@ const initialState = {
 };
 
 export const fetchApiUsers = createAsyncThunk("fetchApiUsers", async () => {
-  const result = await fetch("/api/tasks");
+  const result = await fetch("/api/users");
   return result.json();
 });
 
@@ -44,7 +44,8 @@ const Slice = createSlice({
     builder.addCase(fetchApiUsers.fulfilled, (state, action) => {
       console.log("reducer", action);
 
-      (state.isloading = false), (state.userAPIData = action.payload);
+      state.isloading = false;
+      state.userAPIData = action.payload;
     });
   },
 });

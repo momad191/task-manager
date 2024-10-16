@@ -6,7 +6,7 @@ export const replaceMongoIdInArray = (array) => {
         ...item,
       };
     })
-    .map(({ _id, ...rest }) => rest);
+    .map(({ ...rest }) => rest); // Keep only rest
 
   return mappedArray;
 };

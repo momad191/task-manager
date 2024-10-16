@@ -1,21 +1,19 @@
 "use client";
 // import { getAllTasks } from "@/data/tasks";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApiTasks } from "@/app/redux/tasksSlice";
+
 const TaskList = () => {
-  // const tasks = getAllTasks();
-
-  const [isModalOpen, setModalOpen] = useState(false);
-
   const dispatch = useDispatch();
-  // const { tasks, status, error } = useSelector((state) => state.tasks);
   const tasks = useSelector((data) => data.tasks.taskAPIData);
+
   useEffect(() => {
     dispatch(fetchApiTasks());
-  }, []);
+  }, [dispatch]); // Add 'dispatch' as a dependency
+
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">All Tasks</h1>

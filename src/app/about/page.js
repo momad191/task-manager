@@ -12,8 +12,8 @@ const page = () => {
           </h1>
           <p className="text-lg text-gray-600 mb-8">
             This website helps you organize and manage your daily tasks
-            efficiently. Whether for personal use or team collaboration, it's
-            designed to streamline your workflow.
+            efficiently. Whether for personal use or team collaboration,
+            it&#39;s designed to streamline your workflow.
           </p>
 
           {/* Features Section */}

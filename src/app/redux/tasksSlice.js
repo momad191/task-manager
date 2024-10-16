@@ -45,7 +45,8 @@ const tasksSlice = createSlice({
     builder.addCase(fetchApiTasks.fulfilled, (state, action) => {
       console.log("reducer", action);
 
-      (state.isloading = false), (state.taskAPIData = action.payload);
+      state.isloading = false;
+      state.taskAPIData = action.payload;
     });
   },
 });
