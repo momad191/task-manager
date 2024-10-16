@@ -25,7 +25,7 @@ export default function Landing() {
               </h3>
               <p className="text-gray-600">
                 Easily add tasks with details and due dates to manage your
-                schedule effectively.
+                schedule effectivelyyyyyy.
               </p>
             </div>
 
