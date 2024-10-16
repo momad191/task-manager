@@ -8,7 +8,7 @@ export default function Landing() {
         <div className="container mx-auto px-4">
           {/* Welcome Text */}
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4 transform transition-all duration-700 ease-in-out animate-bounce">
-            Manage Your Daily Tasks Effortlessly
+            Manage Your Daily Tasks Effortlessly   zzzz
           </h1>
           <p className="text-lg text-gray-600 mb-8">
             This website helps you organize and manage your daily tasks
@@ -25,7 +25,7 @@ export default function Landing() {
               </h3>
               <p className="text-gray-600">
                 Easily add tasks with details and due dates to manage your
-                schedule effectivelyyyyyy.
+                schedule effectivel.
               </p>
             </div>
 
