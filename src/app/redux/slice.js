@@ -1,21 +1,22 @@
 import {
   createSlice,
+  createAsyncThunk,
   nanoid,
   current,
-  createAsyncThunk,
 } from "@reduxjs/toolkit";
+
+export const fetchApiUsers = createAsyncThunk("fetchApiUsers", async () => {
+  const result = await fetch("/api/users");
+  return result.json();
+});
 
 const initialState = {
   userAPIData: [],
-  users: JSON.parse(localStorage.getItem("users"))
-    ? JSON.parse(localStorage.getItem("users"))
-    : [],
+  users:
+    typeof window !== "undefined" && localStorage.getItem("users")
+      ? JSON.parse(localStorage.getItem("users"))
+      : [],
 };
-
-export const fetchApiUsers = createAsyncThunk("fetchApiUsers", async () => {
-  const result = await fetch("/api/tasks");
-  return result.json();
-});
 
 const Slice = createSlice({
   name: "addUserSlice",
@@ -29,7 +30,10 @@ const Slice = createSlice({
 
       state.users.push(data);
       let userData = JSON.stringify(current(state.users));
-      localStorage.setItem("users", userData);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("users", userData);
+      }
     },
     removeUser: (state, action) => {
       const data = state.users.filter((item) => {
@@ -37,17 +41,22 @@ const Slice = createSlice({
       });
       state.users = data;
       let userData = JSON.stringify(data);
-      localStorage.setItem("users", userData);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("users", userData);
+      }
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchApiUsers.fulfilled, (state, action) => {
       console.log("reducer", action);
 
-      (state.isloading = false), (state.userAPIData = action.payload);
+      state.isloading = false;
+      state.userAPIData = action.payload;
     });
   },
 });
 
+// Export the async thunk and slice actions
 export const { addUser, removeUser } = Slice.actions;
 export default Slice.reducer;

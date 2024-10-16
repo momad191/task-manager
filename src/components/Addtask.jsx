@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 const Addtask = () => {
   const router = useRouter();
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -24,7 +25,10 @@ const Addtask = () => {
         }),
       });
 
-      response.status === 201 && router.push("/tasks");
+      // Replace the expression with a conditional statement
+      if (response.status === 201) {
+        router.push("/tasks");
+      }
     } catch (e) {
       console.error(e.message);
     }

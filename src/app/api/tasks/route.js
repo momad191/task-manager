@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { createTask, getTasks } from "@/queries/tasks";
+import { createTask } from "@/queries/tasks";
 import { Task } from "@/model/task-model";
 import { dbConnect } from "@/lib/mongo";
 
-// export async function GET(request) {
+// export async function GET() {
 //   return new Response("Hello, Next.js!");
 // }
 
-export const GET = async (request) => {
+export const GET = async () => {
   try {
     // Connect to MongoDBs
     await dbConnect();
@@ -24,9 +24,6 @@ export const GET = async (request) => {
       status: 500,
     });
   }
-
-  res.setHeader("Allow", ["GET"]);
-  res.status(405).end(`Method ${req.method} Not Allowed`);
 };
 
 export const POST = async (request) => {
@@ -46,7 +43,7 @@ export const POST = async (request) => {
   try {
     await createTask(newTask);
   } catch (err) {
-    return new NextResponse(error.mesage, {
+    return new NextResponse(err.mesage, {
       status: 500,
     });
   }

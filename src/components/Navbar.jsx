@@ -57,6 +57,14 @@ const Navbar = async () => {
             </Link>
           </li>
 
+          <li>
+            <Link href="/apiusers">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-300 ease-in-out">
+                all users
+              </button>
+            </Link>
+          </li>
+
           <li>{userName && <Logout />}</li>
         </ul>
 

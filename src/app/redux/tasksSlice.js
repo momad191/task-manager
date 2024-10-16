@@ -1,21 +1,22 @@
 import {
   createSlice,
+  createAsyncThunk,
   nanoid,
   current,
-  createAsyncThunk,
 } from "@reduxjs/toolkit";
-
-const initialState = {
-  taskAPIData: [],
-  tasks: JSON.parse(localStorage.getItem("tasks"))
-    ? JSON.parse(localStorage.getItem("tasks"))
-    : [],
-};
 
 export const fetchApiTasks = createAsyncThunk("fetchApiTasks", async () => {
   const result = await fetch("/api/tasks");
   return result.json();
 });
+
+const initialState = {
+  taskAPIData: [],
+  tasks:
+    typeof window !== "undefined" && localStorage.getItem("tasks")
+      ? JSON.parse(localStorage.getItem("tasks"))
+      : [],
+};
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -29,26 +30,30 @@ const tasksSlice = createSlice({
       };
 
       state.tasks.push(data);
-      let taskData = JSON.stringify(current(state.tasks));
-      localStorage.setItem("tasks", taskData);
+      const taskData = JSON.stringify(current(state.tasks));
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tasks", taskData);
+      }
     },
     removeTask: (state, action) => {
-      const data = state.tasks.filter((item) => {
-        return item.id !== action.payload;
-      });
+      const data = state.tasks.filter((item) => item.id !== action.payload);
       state.tasks = data;
-      let taskData = JSON.stringify(data);
-      localStorage.setItem("tasks", taskData);
+      const taskData = JSON.stringify(data);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tasks", taskData);
+      }
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchApiTasks.fulfilled, (state, action) => {
-      console.log("reducer", action);
-
-      (state.isloading = false), (state.taskAPIData = action.payload);
+      state.isloading = false;
+      state.taskAPIData = action.payload;
     });
   },
 });
 
+// Export the async thunk and slice actions
 export const { addTask, removeTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
