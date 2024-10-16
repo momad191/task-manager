@@ -1,3 +1,23 @@
+import {
+  createSlice,
+  createAsyncThunk,
+  nanoid,
+  current,
+} from "@reduxjs/toolkit";
+
+export const fetchApiTasks = createAsyncThunk("fetchApiTasks", async () => {
+  const result = await fetch("/api/tasks");
+  return result.json();
+});
+
+const initialState = {
+  taskAPIData: [],
+  tasks:
+    typeof window !== "undefined" && localStorage.getItem("tasks")
+      ? JSON.parse(localStorage.getItem("tasks"))
+      : [],
+};
+
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
@@ -10,18 +30,16 @@ const tasksSlice = createSlice({
       };
 
       state.tasks.push(data);
-      let taskData = JSON.stringify(current(state.tasks));
+      const taskData = JSON.stringify(current(state.tasks));
 
       if (typeof window !== "undefined") {
         localStorage.setItem("tasks", taskData);
       }
     },
     removeTask: (state, action) => {
-      const data = state.tasks.filter((item) => {
-        return item.id !== action.payload;
-      });
+      const data = state.tasks.filter((item) => item.id !== action.payload);
       state.tasks = data;
-      let taskData = JSON.stringify(data);
+      const taskData = JSON.stringify(data);
 
       if (typeof window !== "undefined") {
         localStorage.setItem("tasks", taskData);
@@ -36,5 +54,6 @@ const tasksSlice = createSlice({
   },
 });
 
+// Export the async thunk and slice actions
 export const { addTask, removeTask } = tasksSlice.actions;
 export default tasksSlice.reducer;

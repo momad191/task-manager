@@ -1,3 +1,23 @@
+import {
+  createSlice,
+  createAsyncThunk,
+  nanoid,
+  current,
+} from "@reduxjs/toolkit";
+
+export const fetchApiUsers = createAsyncThunk("fetchApiUsers", async () => {
+  const result = await fetch("/api/users");
+  return result.json();
+});
+
+const initialState = {
+  userAPIData: [],
+  users:
+    typeof window !== "undefined" && localStorage.getItem("users")
+      ? JSON.parse(localStorage.getItem("users"))
+      : [],
+};
+
 const Slice = createSlice({
   name: "addUserSlice",
   initialState,
@@ -37,6 +57,6 @@ const Slice = createSlice({
   },
 });
 
-// Export the slice
+// Export the async thunk and slice actions
 export const { addUser, removeUser } = Slice.actions;
 export default Slice.reducer;
