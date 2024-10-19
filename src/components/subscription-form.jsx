@@ -2,10 +2,10 @@
 "use client"
 import React, { useState } from 'react';
 import { sendEmail } from "@/app/actions/email"
-import { useRouter } from "next/navigation";
+ 
 
 const SubscriptionForm = () => {
-  // const router = useRouter();
+  
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: '',

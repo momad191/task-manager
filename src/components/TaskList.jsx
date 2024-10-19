@@ -1,5 +1,4 @@
 "use client"; 
-import {useTranslations} from 'next-intl';
 import { deleteTask } from "@/app/actions/task"
 import { Completed } from "@/app/actions/task"
 import { NotCompleted } from "@/app/actions/task"
@@ -8,7 +7,7 @@ import { NotCompleted } from "@/app/actions/task"
   
  
 const TaskList = ({finished,notfinished}) => {
-  const t = useTranslations('HomePage');
+ 
  
 
   const handleDelete = async (id) => {

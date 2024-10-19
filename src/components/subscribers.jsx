@@ -6,7 +6,7 @@
  
  
  
-const Subscribers = async({subscribers,unsub}) => {
+const Subscribers = ({subscribers,unsub}) => {
  
 
 
