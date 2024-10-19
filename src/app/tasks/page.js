@@ -1,13 +1,23 @@
-"use client";
-import TaskList from "@/components/TaskList";
-// import TaskForm from "@/components/mytask-form";
-// import Mytasks from "@/components/mytasks";
-const TaskListListPage = () => {
+ 
+import TaskList from "@/components/TaskList"; 
+import AddTaskByActions from "@/components/AddTaskByActions";
+    
+import { getCompletedTasks } from "@/queries/tasks"; 
+import { getNotCompletedTasks } from "@/queries/tasks";
+  
+const taskListListPage = async() => {
+
+  const finished = await getCompletedTasks()
+  const notfinished = await getNotCompletedTasks()
   return (
-    <>
-      <TaskList />
-    </>
+   
+      <div className="lg:flex md:flex">      
+      {/* <TaskList /> */}
+      <TaskList finished={finished}  notfinished={notfinished} />
+      <AddTaskByActions />
+      </div>
+    
   );
 };
-
-export default TaskListListPage;
+  
+export default taskListListPage;

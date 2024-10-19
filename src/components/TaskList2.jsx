@@ -1,16 +1,16 @@
 
 
-"use client"
+"use client" 
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsers, setPage } from '../redux/slice';
+import { fetchTasks, setPage } from '../app/redux/tasksSlice';
 
-const UsersList = () => {
+const TasksList = () => {
   const dispatch = useDispatch();
-  const { users, status, error, currentPage, totalPages } = useSelector((state) => state.users);
+  const { tasks, status, error, currentPage, totalPages } = useSelector((state) => state.tasks);
 
   useEffect(() => {
-    dispatch(fetchUsers(currentPage));  // Fetch users based on current page
+    dispatch(fetchTasks(currentPage));  // Fetch users based on current page
   }, [currentPage, dispatch]);
 
   const handlePreviousPage = () => {
@@ -40,24 +40,25 @@ const UsersList = () => {
       </div>
     );
   }
-
+  
   return (
-    <div className="p-10">
-      <h2 className="text-2xl font-bold text-center mb-8">Users List (Page {currentPage})</h2>
+    <div className="p-10" dir=''>
+      <h2 className="text-2xl font-bold text-center mb-8">tasks List (Page {currentPage})</h2>
 
-      {/* User Cards */}
+      {/* tasks Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {users.map((user) => (
-          <div key={user._id} className="bg-white rounded-lg shadow-lg p-6 hover:scale-105 transform transition duration-300 ease-in-out">
+        {tasks.map((task) => (
+          <div key={task._id} className="bg-white rounded-lg shadow-lg p-6 hover:scale-105 transform transition duration-300 ease-in-out">
             <div className="flex items-center space-x-4">
               {/* Placeholder for profile image */}
-              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-xl text-gray-500">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
+                {task.completed == false &&   <button className="w-25 p-5 h-16 rounded-lg bg-red-900 flex items-center justify-center text-xl text-white"> In progress </button>}
+                {task.completed == true &&   <button className="w-25 p-5 h-16 rounded-lg bg-green-900 flex items-center justify-center text-xl text-white"> Done </button>}
+
               <div>
-                <h3 className="text-lg font-bold">{user.name}</h3>
-                <p className="text-sm text-gray-500">{user.email}</p>
+                <h3 className="text-lg font-bold">{task.t_name}</h3>
+                <p className="text-sm text-gray-500">{task.t_desc}</p>
               </div>
+ 
             </div>
           </div>
         ))}
@@ -89,4 +90,4 @@ const UsersList = () => {
   );
 };
 
-export default UsersList;
+export default TasksList;

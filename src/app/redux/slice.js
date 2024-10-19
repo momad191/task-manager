@@ -1,62 +1,52 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  nanoid,
-  current,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const fetchApiUsers = createAsyncThunk("fetchApiUsers", async () => {
-  const result = await fetch("/api/users");
-  return result.json();
+// Async thunk to fetch users with pagination
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async (page = 1, { rejectWithValue }) => {
+  try {
+    const response = await fetch(`/api/users?page=${page}`); // Replace with actual API endpoint
+    // Log response to verify the structure
+    console.log('API Response:', response);
+    return response.json();  // Return the full response data object
+    
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
 });
-
-const initialState = {
-  userAPIData: [],
-  users:
-    typeof window !== "undefined" && localStorage.getItem("users")
-      ? JSON.parse(localStorage.getItem("users"))
-      : [],
-};
-
-const Slice = createSlice({
-  name: "addUserSlice",
-  initialState,
-  reducers: {
-    addUser: (state, action) => {
-      const data = {
-        id: nanoid(),
-        name: action.payload,
-      };
-
-      state.users.push(data);
-      let userData = JSON.stringify(current(state.users));
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("users", userData);
-      }
-    },
-    removeUser: (state, action) => {
-      const data = state.users.filter((item) => {
-        return item.id !== action.payload;
-      });
-      state.users = data;
-      let userData = JSON.stringify(data);
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("users", userData);
-      }
+ 
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: {
+    users: [],        // Initialize as an empty array
+    status: 'idle',   // 'idle' | 'loading' | 'succeeded' | 'failed'
+    error: null,
+    currentPage: 1,
+    totalPages: 0,
+    totalUsers: 0,
+  },
+  reducers: { 
+    setPage: (state, action) => {
+      state.currentPage = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchApiUsers.fulfilled, (state, action) => {
-      console.log("reducer", action);
-
-      state.isloading = false;
-      state.userAPIData = action.payload;
-    });
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        console.log('Fulfilled Payload:', action.payload);
+        state.status = 'succeeded';
+        state.users = action.payload.users;        // Store the users array
+        state.totalPages = action.payload.totalPages; // Store total pages
+        state.totalUsers = action.payload.totalUsers; // Store total number of users
+        state.currentPage = action.payload.page;    // Store the current page
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || action.error.message;
+      });
   },
 });
 
-// Export the async thunk and slice actions
-export const { addUser, removeUser } = Slice.actions;
-export default Slice.reducer;
+export const { setPage } = usersSlice.actions;
+export default usersSlice.reducer;

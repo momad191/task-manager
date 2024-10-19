@@ -1,8 +1,9 @@
 import React from "react";
-import Addtask from "@/components/Addtask";
+import AddtaskByApi from "@/components/AddtaskByApi";
 
 const Addtaskpage = () => {
-  return <Addtask />;
+  // protected page you have to be authorized
+  return <AddtaskByApi />;
 };
-
+ 
 export default Addtaskpage;

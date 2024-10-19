@@ -1,59 +1,50 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  nanoid,
-  current,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const fetchApiTasks = createAsyncThunk("fetchApiTasks", async () => {
-  const result = await fetch("/api/tasks");
-  return result.json();
+// Async thunk to fetch tasks with pagination
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (page = 1, { rejectWithValue }) => {
+  try {
+    const response = await fetch(`/api/tasks?page=${page}`); 
+    console.log('API Response:', response);
+    return response.json();  // Return the full response data object
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
 });
-
-const initialState = {
-  taskAPIData: [],
-  tasks:
-    typeof window !== "undefined" && localStorage.getItem("tasks")
-      ? JSON.parse(localStorage.getItem("tasks"))
-      : [],
-};
-
+  
 const tasksSlice = createSlice({
-  name: "tasks",
-  initialState,
-  reducers: {
-    addTask: (state, action) => {
-      const data = {
-        id: nanoid(),
-        t_name: action.payload,
-        t_desc: action.payload,
-      };
-
-      state.tasks.push(data);
-      const taskData = JSON.stringify(current(state.tasks));
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("tasks", taskData);
-      }
-    },
-    removeTask: (state, action) => {
-      const data = state.tasks.filter((item) => item.id !== action.payload);
-      state.tasks = data;
-      const taskData = JSON.stringify(data);
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("tasks", taskData);
-      }
+  name: 'tasks',
+  initialState: {
+    tasks: [],        // Initialize as an empty array
+    status: 'idle',   // 'idle' | 'loading' | 'succeeded' | 'failed'
+    error: null,
+    currentPage: 1,
+    totalPages: 0,
+    totalTasks: 0,
+  },
+  reducers: { 
+    setPage: (state, action) => {
+      state.currentPage = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchApiTasks.fulfilled, (state, action) => {
-      state.isloading = false;
-      state.taskAPIData = action.payload;
-    });
+    builder
+      .addCase(fetchTasks.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTasks.fulfilled, (state, action) => {
+        console.log('Fulfilled Payload:', action.payload);
+        state.status = 'succeeded';
+        state.tasks = action.payload.tasks;        // Store the tasks array
+        state.totalPages = action.payload.totalPages; // Store total pages
+        state.totalTasks = action.payload.totalTasks; // Store total number of tasks
+        state.currentPage = action.payload.page;    // Store the current page
+      })
+      .addCase(fetchTasks.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || action.error.message;
+      });
   },
 });
 
-// Export the async thunk and slice actions
-export const { addTask, removeTask } = tasksSlice.actions;
+export const { setPage } = tasksSlice.actions;
 export default tasksSlice.reducer;

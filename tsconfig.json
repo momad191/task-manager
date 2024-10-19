@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "src/app/layout.js",
     "src/app/page.js",
-    "src/components/theme-provider.js"
+  
   ],
   "exclude": ["node_modules"]
 }

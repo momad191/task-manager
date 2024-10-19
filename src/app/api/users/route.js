@@ -1,22 +1,43 @@
 import { NextResponse } from "next/server";
-import { getUsers } from "@/queries/users";
-// import { User } from "@/model/user-model";
+import { User } from "@/model/user-model";
 import { dbConnect } from "@/lib/mongo";
 
-export const GET = async () => {
+export async function GET(request) {
   try {
-    // Connect to MongoDBs
+    // Connect to MongoDB
     await dbConnect();
-    // Fetch all users
-    const users = await getUsers();
 
-    // Return the users as JSON
-    return new NextResponse(JSON.stringify(users), {
-      status: 200,
-    });
+    // Get query parameters for pagination (page and limit)
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page")) || 1; // default to page 1
+    const limit = parseInt(searchParams.get("limit")) || 10; // default to 10 tasks per page
+    const skip = (page - 1) * limit;
+
+    // Fetch tasks with pagination from the database
+    const users = await User.find({})
+     
+      .skip(skip)
+      .limit(limit);
+
+    // Get the total count of tasks
+    const totalUsers = await User.countDocuments({});
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    // Return the tasks and pagination info as JSON
+    return new NextResponse(JSON.stringify({
+      status: "success",
+      message: "users retrieved successfully",
+      page,
+      totalPages,
+      totalUsers,
+      users,
+    }));
   } catch (error) {
-    return new NextResponse("Error in fetching users" + error.message, {
+    return new NextResponse("Error in fetching users: " + error.message, {
       status: 500,
     });
   }
-};
+}
+
